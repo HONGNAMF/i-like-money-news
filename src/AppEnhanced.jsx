@@ -18,7 +18,6 @@ import {
   Tag,
   TrendingUp,
   UserPlus,
-  UserRound,
   X
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -1259,9 +1258,15 @@ function ProfilePage({ user, summary, memberMode, onToggleInterest, onAddInteres
           <div className="interestChips">
             {summary.recentKeywords.length ? (
               summary.recentKeywords.map((keyword) => (
-                <button key={keyword} className="termButton" type="button" onClick={() => onOpenTerm(keyword)}>
-                  {keyword}
-                </button>
+                TERM_DICTIONARY[keyword] ? (
+                  <button key={keyword} className="termButton" type="button" onClick={() => onOpenTerm(keyword)}>
+                    {keyword}
+                  </button>
+                ) : (
+                  <span key={keyword} className="chip selected keywordChipStatic">
+                    {keyword}
+                  </span>
+                )
               ))
             ) : (
               <p className="helperText">메모와 관심 키워드가 쌓이면 여기에 현재의 관심사가 보이기 시작해요.</p>
@@ -1341,7 +1346,12 @@ function LoadMoreArea({ articleSource, remaining, totalCount, onLoadMore }) {
 function TermModal({ entry, onClose }) {
   const article = entry.article;
   const term = entry.term;
-  const dictionaryEntry = TERM_DICTIONARY[term];
+  const dictionaryEntry = TERM_DICTIONARY[term] || {
+    aliases: [],
+    short: "이 표현은 사용자가 직접 남긴 관심 키워드예요.",
+    detail: "기사와 메모를 읽는 과정에서 중요하게 느낀 단어를 따로 기록해둔 상태예요.",
+    example: "관심 키워드는 나중에 내 경제 흐름이 어떻게 바뀌는지 돌아볼 때 좋은 단서가 됩니다."
+  };
 
   useEffect(() => {
     function handleEscape(event) {
