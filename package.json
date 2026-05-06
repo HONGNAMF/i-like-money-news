@@ -1,0 +1,24 @@
+{
+  "name": "easy-economy-news",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "rss:server": "node server/rss-server.js",
+    "live:preview": "vite build && node server/live-preview.js"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "vite": "^7.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.475.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "fast-xml-parser": "^4.4.1"
+  },
+  "devDependencies": {}
+}
