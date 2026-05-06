@@ -52,21 +52,53 @@ function normalizeArticles(items) {
 }
 
 function normalizeArticle(article, index) {
-  const title = String(article?.title || "").trim();
-  const summary = String(article?.summary || "").replace(/\s+/g, " ").trim();
-  const source = String(article?.source || "경제뉴스").trim();
+  const title = sanitizeText(article?.title || "");
+  const summary = sanitizeText(article?.summary || article?.description || "");
+  const source = sanitizeText(article?.source || "경제뉴스");
   const category = article?.category || inferCategory(`${title} ${summary}`);
-  const url = String(article?.url || "").trim();
+  const url = String(article?.url || article?.link || "").trim();
 
   return {
     id: article?.id || makeArticleId(title, source, index),
     title,
     source,
-    publishedAt: normalizeDate(article?.publishedAt),
+    publishedAt: normalizeDate(article?.publishedAt || article?.pubDate),
     category,
     summary: summary.slice(0, 220),
     url
   };
+}
+
+function sanitizeText(value) {
+  let text = String(value || "")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<\/p>|<\/div>|<\/li>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .trim();
+
+  text = decodeHtml(text)
+    .replace(/\u00a0/g, " ")
+    .replace(/[\t\n\r]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return text;
+}
+
+function decodeHtml(value) {
+  if (typeof document !== "undefined") {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = value;
+    return textarea.value;
+  }
+
+  return value
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&quot;/gi, '"')
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
 }
 
 function makeArticleId(title, source, index) {
