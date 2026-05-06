@@ -4,16 +4,18 @@
   --paper: #f6f1e7;
   --paper-strong: #fffdf8;
   --panel: rgba(255, 255, 255, 0.86);
+  --panel-strong: rgba(255, 255, 255, 0.94);
   --border: #e3dac9;
   --border-strong: #d2c3ab;
   --accent: #223433;
   --accent-soft: #edf5f2;
   --gold: #b37b28;
+  --gold-soft: #fff0c7;
   --shadow: 0 18px 44px rgba(64, 52, 34, 0.08);
   color: var(--ink);
   background: var(--paper);
   font-family: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-  line-height: 1.5;
+  line-height: 1.55;
   text-rendering: optimizeLegibility;
 }
 
@@ -52,14 +54,28 @@ select {
   color: inherit;
 }
 
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .appShell {
   min-height: 100vh;
+}
+
+.authShell {
+  display: grid;
+  align-items: center;
 }
 
 .app {
   width: min(1220px, calc(100% - 32px));
   margin: 0 auto;
   padding: 22px 0 56px;
+}
+
+.authApp {
+  padding: 36px 0 48px;
 }
 
 .topbar {
@@ -129,28 +145,58 @@ select {
   font-weight: 700;
 }
 
-.topbarActions {
+.topbarActions,
+.profileTools,
+.lockedActions,
+.memoActions,
+.memoHeading {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   gap: 10px;
   flex-wrap: wrap;
 }
 
 .livePill,
 .refreshButton,
-.navTabs {
+.navTabs,
+.profileShortcut,
+.ghostButton,
+.authCard,
+.authStoryCard,
+.modeBanner,
+.profileCard,
+.interestPanel,
+.recentPanel,
+.sensePanel,
+.lockedView,
+.authHero,
+.heroMain,
+.learnedWidget,
+.briefingPanel,
+.focusPanel,
+.integrationPanel,
+.articleCard,
+.noteSummary,
+.emptyState,
+.loadMoreArea {
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 6px 20px rgba(64, 52, 34, 0.04);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.livePill,
+.refreshButton,
+.navTabs,
+.profileShortcut,
+.ghostButton {
+  min-height: 42px;
+  border-radius: 999px;
 }
 
 .livePill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 42px;
-  border-radius: 999px;
   padding: 0 14px;
   color: var(--muted);
   font-size: 0.9rem;
@@ -182,14 +228,34 @@ select {
   background: currentColor;
 }
 
-.refreshButton {
+.refreshButton,
+.profileShortcut,
+.ghostButton,
+.browseButton,
+.primaryButton,
+.uploadButton,
+.loadMoreButton,
+.termButton {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  min-height: 42px;
   border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.refreshButton,
+.ghostButton,
+.profileShortcut,
+.uploadButton {
   padding: 0 14px;
   color: var(--accent);
+}
+
+.refreshButton {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .refreshButton:disabled {
@@ -206,7 +272,6 @@ select {
   align-items: center;
   gap: 6px;
   padding: 5px;
-  border-radius: 999px;
 }
 
 .navTabs button {
@@ -227,41 +292,92 @@ select {
   font-size: 0.84rem;
 }
 
-.hero {
+.profileShortcut,
+.ghostButton,
+.authAction {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.profileShortcut span {
+  font-weight: 700;
+}
+
+.authAction {
+  min-height: 42px;
+}
+
+.hero,
+.authLayout,
+.contentGrid,
+.profileDetails {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
   gap: 22px;
   align-items: start;
-  padding: 28px 0 24px;
+}
+
+.hero,
+.contentGrid {
+  grid-template-columns: minmax(0, 1fr) 340px;
+}
+
+.authLayout {
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
 }
 
 .heroMain,
+.authHero,
+.authCard,
 .learnedWidget,
 .briefingPanel,
 .focusPanel,
-.gamePanel,
 .integrationPanel,
 .articleCard,
 .noteSummary,
 .emptyState,
-.loadMoreArea {
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--panel);
-  box-shadow: var(--shadow);
+.loadMoreArea,
+.modeBanner,
+.profileCard,
+.interestPanel,
+.recentPanel,
+.sensePanel,
+.lockedView {
+  border-radius: 22px;
 }
 
-.heroMain {
-  padding: 30px;
+.heroMain,
+.authHero {
+  padding: 32px;
   background:
     linear-gradient(135deg, rgba(255, 247, 223, 0.8), rgba(255, 255, 255, 0.72)),
     var(--panel);
 }
 
 .heroSide,
-.sidePanel {
+.sidePanel,
+.authPanels,
+.notesPage,
+.profilePage,
+.profileLayout,
+.recentList,
+.briefingList,
+.guideGrid,
+.historyGrid,
+.memoGrid,
+.profileStats,
+.authStoryGrid,
+.interestChips,
+.termGuideStack {
   display: grid;
   gap: 16px;
+}
+
+.heroSide,
+.sidePanel,
+.authPanels,
+.notesPage,
+.profilePage {
+  gap: 18px;
 }
 
 .eyebrow {
@@ -274,9 +390,11 @@ select {
 }
 
 h1,
+h2,
 .articleCard h2,
 .focusPanel h3,
-.termModal h3 {
+.termModal h3,
+.profileCard h2 {
   font-family: "Noto Serif KR", Georgia, serif;
   letter-spacing: -0.02em;
 }
@@ -287,18 +405,45 @@ h1 {
   line-height: 1.04;
 }
 
+h2,
+.profileCard h2 {
+  margin: 0;
+  font-size: 1.7rem;
+}
+
+.heroText,
+.helperText,
+.focusPanel p,
+.integrationPanel p,
+.sensePanel p,
+.recentRecord p,
+.authStoryCard p,
+.lockedView p,
+.termGuideStack p,
+.guideCard p,
+.moodDetail span {
+  margin: 0;
+  color: var(--muted);
+}
+
 .heroText {
   max-width: 760px;
-  margin: 16px 0 0;
-  color: #555148;
+  margin-top: 16px;
   font-size: 1.05rem;
 }
 
-.heroStats {
-  display: grid;
+.heroStats,
+.noteSummary,
+.profileStats,
+.authStoryGrid,
+.historyGrid,
+.memoGrid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+}
+
+.heroStats {
   margin-top: 24px;
+  gap: 12px;
 }
 
 .statTile {
@@ -310,46 +455,177 @@ h1 {
   background: rgba(255, 255, 255, 0.7);
 }
 
-.statTile strong {
+.statTile strong,
+.noteSummary strong,
+.profileStats strong {
   font-size: 1.7rem;
 }
 
-.statTile span {
+.statTile span,
+.noteSummary span,
+.profileStats span {
   font-weight: 700;
 }
 
-.statTile small {
+.statTile small,
+.noteSummary span,
+.profileStats span,
+.recentRecord span,
+.historyCard span,
+.aliasLine {
   color: #7f7667;
 }
 
+.authStoryCard,
+.authCard,
 .learnedWidget,
 .briefingPanel,
 .focusPanel,
-.gamePanel,
-.integrationPanel {
-  padding: 20px;
+.integrationPanel,
+.articleCard,
+.modeBanner,
+.profileCard,
+.interestPanel,
+.recentPanel,
+.sensePanel,
+.lockedView,
+.loadMoreArea,
+.noteSummary,
+.emptyState {
+  padding: 22px;
+}
+
+.authCard,
+.authStoryCard {
+  background: var(--panel-strong);
+}
+
+.authCard {
+  display: grid;
+  gap: 14px;
+}
+
+.authHint,
+.authFeedback,
+.briefingLead {
+  margin: 0;
+}
+
+.authFeedback {
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+.authFeedback.success {
+  background: #e9f6ed;
+  color: #2c6245;
+}
+
+.authFeedback.error {
+  background: #fff0eb;
+  color: #914429;
+}
+
+.authStoryCard strong,
+.panelTitle strong,
+.widgetTitle strong,
+.recentRecord strong,
+.guideCard strong,
+.historyCard strong {
+  font-weight: 800;
+}
+
+.authStoryGrid {
+  margin: 24px 0 20px;
+}
+
+.authStoryCard {
+  gap: 8px;
+}
+
+.browseButton,
+.primaryButton,
+.loadMoreButton {
+  min-height: 48px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  padding: 0 18px;
+  font-weight: 800;
+}
+
+.primaryButton.soft {
+  background: #fff;
+  color: var(--accent);
+}
+
+.primaryButton.small,
+.ghostButton,
+.uploadButton,
+.termButton {
+  min-height: 42px;
+}
+
+.uploadButton {
+  position: relative;
+  width: fit-content;
+  border: 1px solid var(--border);
+  background: #fffdf8;
+  font-weight: 700;
+}
+
+.uploadButton input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.modeBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.modeBanner strong,
+.lockedView strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.08rem;
 }
 
 .widgetTitle,
-.panelTitle {
+.panelTitle,
+.cardTop,
+.cardActions,
+.focusActions,
+.metaRow,
+.profileIdentity {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.learnedWidget p,
-.briefingLead,
-.focusPanel p,
-.integrationPanel p,
-.helperText {
-  margin: 0;
-  color: var(--muted);
+.panelTitle,
+.widgetTitle,
+.profileIdentity {
+  justify-content: flex-start;
+}
+
+.panelTitle.compact {
+  margin-bottom: 0;
 }
 
 .learnedTerms,
 .termList,
-.categoryRail {
+.categoryRail,
+.cardBadges,
+.feelingList,
+.interestChips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -358,7 +634,9 @@ h1 {
 .learnedTerms button,
 .termList button,
 .chip,
-.toggleChip {
+.toggleChip,
+.feelingChip,
+.termButton {
   border: 1px solid var(--border);
   border-radius: 999px;
   background: #fffaf1;
@@ -372,21 +650,24 @@ h1 {
   font-size: 0.82rem;
 }
 
-.briefingList {
-  display: grid;
-  gap: 12px;
-  margin-top: 14px;
-}
-
-.briefingList div {
+.briefingList div,
+.profileStats div,
+.noteSummary div {
   display: grid;
   gap: 4px;
 }
 
+.briefingLabel,
+.sectionLabel,
+.fieldLabel,
+.memoHeading p,
+.moodDetail strong {
+  color: #5a554b;
+  font-weight: 800;
+}
+
 .briefingLabel {
-  color: #8a7f70;
   font-size: 0.84rem;
-  font-weight: 700;
 }
 
 .toolbar,
@@ -411,15 +692,30 @@ h1 {
   flex-wrap: nowrap;
 }
 
-.chip {
+.chip,
+.toggleChip,
+.feelingChip,
+.termButton {
   flex: 0 0 auto;
 }
 
 .chip.selected,
-.toggleChip.active {
+.toggleChip.active,
+.feelingChip.active {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+}
+
+.searchBox,
+.sortBox,
+.sourceNotice,
+.fieldLabel input,
+.fieldLabel textarea,
+.interestForm input {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper-strong);
 }
 
 .searchBox,
@@ -430,14 +726,14 @@ h1 {
   gap: 9px;
   min-height: 46px;
   padding: 0 13px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--paper-strong);
 }
 
 .searchBox input,
+.sortBox select,
 .answerInput,
-.sortBox select {
+.fieldLabel input,
+.fieldLabel textarea,
+.interestForm input {
   width: 100%;
   border: 0;
   outline: 0;
@@ -473,7 +769,8 @@ h1 {
   padding: 0;
 }
 
-.textButton.inline {
+.textButton.inline,
+.helperText.inline {
   align-self: center;
 }
 
@@ -484,10 +781,6 @@ h1 {
   color: #5b554b;
   font-size: 0.92rem;
   font-weight: 800;
-}
-
-.sourceNotice strong {
-  color: inherit;
 }
 
 .sourceNotice.live {
@@ -503,15 +796,17 @@ h1 {
 }
 
 .contentGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 22px;
   align-items: start;
 }
 
-.articleColumn {
+.articleColumn,
+.profileLayout {
   display: grid;
-  gap: 16px;
+  gap: 18px;
+}
+
+.profileLayout {
+  grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.85fr);
 }
 
 .articleGrid {
@@ -520,34 +815,31 @@ h1 {
   gap: 16px;
 }
 
+.notesGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .articleCard {
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  padding: 20px;
 }
 
 .cardTop,
 .cardActions,
-.gameActions,
 .focusActions,
 .metaRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 10px;
 }
 
-.cardBadges {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+.compactWrap {
+  margin-bottom: 6px;
 }
 
 .categoryBadge,
 .statusPill,
-.miniStat {
+.miniStat,
+.moodBadge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -561,6 +853,11 @@ h1 {
 .miniStat {
   background: #f3efe6;
   color: #5b554b;
+}
+
+.moodBadge {
+  background: #f4efe2;
+  color: #514539;
 }
 
 .categoryBadge.blue { background: #e5efff; color: #23508a; }
@@ -621,7 +918,8 @@ h1 {
 }
 
 .termSection,
-.memoBox {
+.memoBox,
+.moodSection {
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid #eee6da;
@@ -632,14 +930,21 @@ h1 {
   align-items: center;
   gap: 6px;
   margin: 0 0 10px;
-  color: #5a554b;
   font-size: 0.9rem;
-  font-weight: 800;
+}
+
+.sectionLabel.small {
+  margin-bottom: 8px;
 }
 
 .emptyText {
   color: #8a8379;
   font-size: 0.92rem;
+}
+
+.moodDetail {
+  display: grid;
+  gap: 6px;
 }
 
 .guideToggle {
@@ -664,61 +969,100 @@ h1 {
   transform: rotate(180deg);
 }
 
-.guideList {
-  margin: 12px 0 0;
-  padding-left: 22px;
-  color: #4e493f;
+.guideGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12px;
 }
 
-.guideList li + li {
-  margin-top: 8px;
-}
-
-.memoBox label {
-  display: grid;
-  grid-template-columns: 18px 1fr;
-  gap: 8px;
-  color: #5a554b;
-  font-size: 0.92rem;
-  font-weight: 800;
-}
-
-.memoBox textarea,
-.tagInput input,
-.answerInput {
-  border: 1px solid var(--border);
-  border-radius: 14px;
+.guideCard,
+.historyCard {
+  padding: 14px;
+  border: 1px solid #ebe3d5;
+  border-radius: 16px;
   background: #fffdf8;
-  outline: 0;
 }
 
-.memoBox textarea {
-  grid-column: 1 / -1;
-  min-height: 92px;
+.guideCard.tone {
+  background: #fbf6ea;
+}
+
+.fieldLabel {
+  display: grid;
+  gap: 8px;
+  font-size: 0.92rem;
+}
+
+.fieldLabel input,
+.fieldLabel textarea,
+.interestForm input {
+  padding: 12px 14px;
+}
+
+.fieldLabel textarea {
+  min-height: 104px;
   resize: vertical;
-  padding: 12px;
 }
 
-.tagInput {
-  margin-top: 10px;
+.memoGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 14px;
 }
 
-.tagInput input {
-  grid-column: 1 / -1;
-  height: 42px;
-  padding: 0 12px;
+.feelingSection {
+  margin-top: 14px;
 }
 
-.cardActions {
+.memoActions {
+  margin-top: 16px;
+}
+
+.historyBox {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(245, 239, 227, 0.72);
+}
+
+.historyGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.historyCard.muted {
+  background: #f8f4eb;
+}
+
+.historyCard.current {
+  border-color: #cfded8;
+  background: #f3faf7;
+}
+
+.lockedMemo {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #f7f2e8;
+  color: #61584b;
+}
+
+.lockedMemo p {
+  margin: 0;
+}
+
+.cardActions,
+.focusActions {
   margin-top: auto;
   padding-top: 16px;
 }
 
 .cardActions a,
 .cardActions button,
-.gameActions button,
 .focusActions a,
-.focusActions button {
+.focusActions button,
+.sensePanel a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -734,7 +1078,6 @@ h1 {
 }
 
 .cardActions button,
-.gameActions button:first-child,
 .focusActions button {
   background: #fff;
   color: var(--accent);
@@ -746,89 +1089,9 @@ h1 {
   line-height: 1.35;
 }
 
-.focusActions {
+.sensePanel a {
   margin-top: 16px;
-}
-
-.quizPrompt {
-  min-height: 72px;
-  margin: 0 0 14px;
-  color: #3f3930;
-}
-
-.segmented {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 4px;
-  border-radius: 14px;
-  background: #eee6da;
-}
-
-.segmented button {
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: #625e55;
-  padding: 8px;
-}
-
-.segmented .active {
-  background: #fff;
-  color: #242f2d;
-  font-weight: 800;
-}
-
-.choices {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.choices button,
-.answerInput {
-  min-height: 42px;
-  padding: 10px;
-}
-
-.choices button {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: #fffdf8;
-  color: #332f29;
-}
-
-.choices .picked {
-  border-color: var(--accent);
-  background: #e9f2ef;
-}
-
-.answerInput {
-  margin-top: 12px;
-}
-
-.result {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 12px;
-  border-radius: 14px;
-  padding: 10px 12px;
-  font-weight: 800;
-}
-
-.result.correct {
-  background: #e3f5e9;
-  color: #276041;
-}
-
-.result.wrong {
-  background: #ffe8e1;
-  color: #943e28;
-}
-
-.gameActions {
-  margin-top: 14px;
+  width: fit-content;
 }
 
 .integrationPanel ul {
@@ -841,46 +1104,24 @@ h1 {
   margin-top: 8px;
 }
 
-.noteSummary {
-  display: grid;
+.noteSummary,
+.profileStats {
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  padding: 18px;
-}
-
-.noteSummary div {
-  display: grid;
-  gap: 4px;
-}
-
-.noteSummary strong {
-  font-size: 1.8rem;
-}
-
-.noteSummary span {
-  color: var(--muted);
-}
-
-.notesPage {
-  display: grid;
-  gap: 18px;
-}
-
-.notesGrid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .emptyState {
-  padding: 34px;
-  color: var(--muted);
   text-align: center;
+  color: var(--muted);
+}
+
+.emptyState.compact {
+  padding: 22px;
 }
 
 .loadMoreArea {
   grid-column: 1 / -1;
   display: grid;
   gap: 8px;
-  padding: 16px;
   color: #5b554b;
   text-align: center;
 }
@@ -894,13 +1135,61 @@ h1 {
   font-size: 0.95rem;
 }
 
-.loadMoreButton {
-  min-height: 48px;
-  border: 1px solid var(--accent);
-  border-radius: 14px;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 900;
+.lockedView {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.profileIdentity {
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  object-fit: cover;
+  background: #efe6d0;
+}
+
+.avatarLarge {
+  width: 84px;
+  height: 84px;
+}
+
+.avatar.fallback {
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid #d9c7a2;
+  color: #6c5830;
+  font-weight: 800;
+}
+
+.interestForm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.interestForm input {
+  min-height: 44px;
+}
+
+.recentRecord {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid #ebe3d5;
+  border-radius: 16px;
+  background: #fffdf8;
+}
+
+.termButton {
+  min-height: 40px;
+  background: #fffdf8;
 }
 
 .modalBackdrop {
@@ -915,8 +1204,8 @@ h1 {
 
 .termModal {
   position: relative;
-  width: min(560px, 100%);
-  border-radius: 22px;
+  width: min(640px, 100%);
+  border-radius: 24px;
   background: #fffdf8;
   padding: 28px;
   box-shadow: 0 30px 80px rgba(28, 22, 14, 0.22);
@@ -927,24 +1216,22 @@ h1 {
   font-size: 2rem;
 }
 
-.aliasLine {
-  margin: 0 0 10px;
-  color: #8b7f70;
-  font-size: 0.94rem;
-}
-
 .termShort {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   color: #2e5d50;
   font-weight: 800;
+}
+
+.termGuideStack {
+  margin-top: 16px;
 }
 
 .exampleBox {
   display: grid;
   gap: 5px;
-  margin-top: 16px;
+  margin-top: 18px;
   border-radius: 14px;
-  background: #fff0c7;
+  background: var(--gold-soft);
   padding: 14px;
 }
 
@@ -961,6 +1248,22 @@ h1 {
   background: #fff;
 }
 
+.primaryButton:hover,
+.browseButton:hover,
+.loadMoreButton:hover,
+.ghostButton:hover,
+.profileShortcut:hover,
+.refreshButton:hover,
+.uploadButton:hover,
+.termButton:hover,
+.cardActions a:hover,
+.cardActions button:hover,
+.focusActions a:hover,
+.focusActions button:hover,
+.sensePanel a:hover {
+  transform: translateY(-1px);
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -970,22 +1273,21 @@ h1 {
   }
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1180px) {
+  .authLayout,
+  .hero,
+  .contentGrid,
+  .profileLayout,
+  .profileDetails {
+    grid-template-columns: 1fr;
+  }
+
   .toolbar {
     grid-template-columns: 1fr 1fr;
   }
 
-  .contentGrid,
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
-  .sidePanel {
-    position: static;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .notesGrid {
+  .notesGrid,
+  .articleGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1003,42 +1305,61 @@ h1 {
 
   .topbarActions,
   .navTabs,
-  .brand {
+  .brand,
+  .profileTools {
     width: 100%;
   }
 
   .heroMain,
+  .authHero,
+  .authCard,
   .learnedWidget,
   .briefingPanel,
   .focusPanel,
-  .gamePanel,
   .integrationPanel,
   .articleCard,
   .noteSummary,
-  .loadMoreArea {
-    border-radius: 16px;
+  .loadMoreArea,
+  .modeBanner,
+  .profileCard,
+  .interestPanel,
+  .recentPanel,
+  .sensePanel,
+  .lockedView,
+  .emptyState {
+    border-radius: 18px;
   }
 
   .heroStats,
-  .articleGrid,
-  .sidePanel,
   .noteSummary,
-  .notesGrid,
-  .choices {
+  .profileStats,
+  .authStoryGrid,
+  .memoGrid,
+  .guideGrid,
+  .historyGrid,
+  .articleGrid,
+  .notesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar,
+  .notesToolbar,
+  .interestForm {
     grid-template-columns: 1fr;
   }
 
   .toolbar,
   .notesToolbar {
-    grid-template-columns: 1fr;
+    display: grid;
   }
 
-  .toolbarExtras {
-    justify-content: space-between;
-  }
-
+  .toolbarExtras,
+  .modeBanner,
   .cardActions,
-  .focusActions {
+  .focusActions,
+  .lockedActions,
+  .profileTools,
+  .interestForm {
     flex-direction: column;
     align-items: stretch;
   }
@@ -1046,8 +1367,19 @@ h1 {
   .cardActions a,
   .cardActions button,
   .focusActions a,
-  .focusActions button {
+  .focusActions button,
+  .sensePanel a,
+  .primaryButton,
+  .browseButton,
+  .ghostButton,
+  .profileShortcut,
+  .uploadButton {
     width: 100%;
+  }
+
+  .profileIdentity {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .modalBackdrop {
