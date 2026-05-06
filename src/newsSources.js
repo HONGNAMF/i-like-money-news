@@ -1,5 +1,5 @@
-export async function fetchArticles() {
-  // Keep article bodies out of this layer. Store only title, short summary, source, date, and URL.
+export async function fetchArticles(options = {}) {
+  const { bustCache = false } = options;
   const host = window.location.hostname || "127.0.0.1";
   const endpoints = [];
 
@@ -12,10 +12,14 @@ export async function fetchArticles() {
 
   for (const endpoint of endpoints) {
     try {
-      const response = await fetch(endpoint, { signal: AbortSignal.timeout(4500) });
+      const response = await fetch(withBust(endpoint, bustCache), {
+        signal: AbortSignal.timeout(4500),
+        cache: bustCache ? "no-store" : "default"
+      });
       if (!response.ok) continue;
-      const articles = await response.json();
-      if (Array.isArray(articles) && articles.length) {
+
+      const articles = normalizeArticles(await response.json());
+      if (articles.length) {
         return { articles, source: "live" };
       }
     } catch {
@@ -23,7 +27,72 @@ export async function fetchArticles() {
     }
   }
 
-  return { articles: DUMMY_ARTICLES, source: "sample" };
+  return { articles: normalizeArticles(DUMMY_ARTICLES), source: "sample" };
+}
+
+function withBust(endpoint, bustCache) {
+  if (!bustCache) return endpoint;
+  const divider = endpoint.includes("?") ? "&" : "?";
+  return `${endpoint}${divider}ts=${Date.now()}`;
+}
+
+function normalizeArticles(items) {
+  const seen = new Set();
+
+  return (Array.isArray(items) ? items : [])
+    .map((article, index) => normalizeArticle(article, index))
+    .filter((article) => article.title && article.summary && article.url)
+    .filter((article) => {
+      const key = `${article.title.replace(/\s+/g, "")}::${article.source}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
+}
+
+function normalizeArticle(article, index) {
+  const title = String(article?.title || "").trim();
+  const summary = String(article?.summary || "").replace(/\s+/g, " ").trim();
+  const source = String(article?.source || "경제뉴스").trim();
+  const category = article?.category || inferCategory(`${title} ${summary}`);
+  const url = String(article?.url || "").trim();
+
+  return {
+    id: article?.id || makeArticleId(title, source, index),
+    title,
+    source,
+    publishedAt: normalizeDate(article?.publishedAt),
+    category,
+    summary: summary.slice(0, 220),
+    url
+  };
+}
+
+function makeArticleId(title, source, index) {
+  return `${title}-${source}-${index}`
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]+/g, "-")
+    .replace(/^-+|-+$/g, "") || `article-${index}`;
+}
+
+function normalizeDate(value) {
+  const date = value ? new Date(value) : new Date();
+  return Number.isNaN(date.getTime()) ? new Date().toISOString().slice(0, 10) : date.toISOString().slice(0, 10);
+}
+
+function inferCategory(text) {
+  const rules = [
+    ["rate", ["기준금리", "금리", "대출", "한국은행", "연준"]],
+    ["fx", ["환율", "달러", "엔화", "원화"]],
+    ["stock", ["코스피", "코스닥", "주가", "증시", "순매수"]],
+    ["realestate", ["부동산", "전세", "주택", "아파트", "LTV"]],
+    ["company", ["기업", "영업이익", "매출", "실적"]],
+    ["price", ["물가", "소비자물가지수", "인플레이션", "실질임금"]],
+    ["global", ["미국", "중국", "글로벌", "국채"]]
+  ];
+
+  return rules.find(([, words]) => words.some((word) => text.includes(word)))?.[0] || "global";
 }
 
 export const DUMMY_ARTICLES = [
@@ -70,7 +139,7 @@ export const DUMMY_ARTICLES = [
   {
     id: "company-001",
     title: "대형 유통사 영업이익 개선, 비용 절감과 온라인 매출 회복 효과",
-    source: "비즈와치",
+    source: "비즈워치",
     publishedAt: "2026-04-25",
     category: "company",
     summary:
