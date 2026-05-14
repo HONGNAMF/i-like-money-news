@@ -25,16 +25,16 @@ const BRANDS = {
     mark: "🦀",
     name: "나는 돈이 좋아~",
     tagline: "읽고 이해하고 기록하는 경제 아카이브",
-    heroTitle: "나는 돈이 좋아~",
-    heroText: "경제뉴스를 읽고 끝내지 마세요. 어려운 단어를 내 언어로 이해하고, 시장 분위기를 천천히 느끼고, 오늘의 생각을 기록해보세요."
+    heroTitle: "경제뉴스를 쉽게 읽고, 내 생각으로 남기는 공간",
+    heroText: "기사 제목과 짧은 요약을 천천히 읽고, 어려운 경제 단어를 쉽게 풀어보고, 오늘의 시장 분위기와 내 생각을 개인 노트처럼 기록해보세요."
   },
   personal: {
     type: "image",
     mark: "/assets/money-crab.jpg",
     name: "나는 돈이 좋아~",
     tagline: "읽고 이해하고 기록하는 경제 아카이브",
-    heroTitle: "나는 돈이 좋아~",
-    heroText: "경제뉴스를 읽고 끝내지 마세요. 어려운 단어를 내 언어로 이해하고, 시장 분위기를 천천히 느끼고, 오늘의 생각을 기록해보세요."
+    heroTitle: "경제뉴스를 쉽게 읽고, 내 생각으로 남기는 공간",
+    heroText: "기사 제목과 짧은 요약을 천천히 읽고, 어려운 경제 단어를 쉽게 풀어보고, 오늘의 시장 분위기와 내 생각을 개인 노트처럼 기록해보세요."
   }
 };
 
@@ -536,6 +536,7 @@ function App() {
           <p className="heroText">
             {brand.heroText}
           </p>
+          <ReadingFlow />
           <div className="heroStats">
             <div className="statTile"><strong>{articles.length || "-"}</strong><span>오늘 읽을 뉴스</span><small>제목과 짧은 요약만 모았어요</small></div>
             <div className="statTile"><strong>{savedArticles.length}</strong><span>내 노트</span><small>다시 보고 싶은 생각</small></div>
@@ -558,6 +559,7 @@ function App() {
             articleSource={articleSource}
             totalCount={filteredArticles.length}
           />
+          <TermSearchPanel articles={articles} onOpenTerm={openTerm} variant="wide" />
           <MonthlyTopics topics={monthlyTopics} articles={articles} onOpenTerm={openTerm} />
           <section className="contentGrid">
             <div className="articleGrid">
@@ -580,7 +582,6 @@ function App() {
               />
             </div>
             <aside className="sidePanel">
-              <TermSearchPanel articles={articles} onOpenTerm={openTerm} />
               <TermGame learnedTerms={learnedList} onOpenTerm={openTerm} />
               <SensefolioPanel />
             </aside>
@@ -599,6 +600,25 @@ function App() {
 
       {openedTerm && <TermModal term={openedTerm} articles={articles} onOpenTerm={openTerm} onClose={() => setOpenedTerm(null)} />}
     </main>
+  );
+}
+
+function ReadingFlow() {
+  return (
+    <div className="readingFlow" aria-label="서비스 이용 흐름">
+      <div>
+        <strong>1. 읽기</strong>
+        <span>여러 경제뉴스를 짧은 요약으로 부담 없이 훑어봐요.</span>
+      </div>
+      <div>
+        <strong>2. 이해하기</strong>
+        <span>궁금한 경제 단어와 시장 분위기를 쉬운 말로 풀어봐요.</span>
+      </div>
+      <div>
+        <strong>3. 기록하기</strong>
+        <span>오늘 느낀 점과 다시 보고 싶은 생각을 내 노트에 남겨요.</span>
+      </div>
+    </div>
   );
 }
 
@@ -898,7 +918,7 @@ function LearnedWidget({ learnedTerms, openTerm }) {
   );
 }
 
-function TermSearchPanel({ articles, onOpenTerm }) {
+function TermSearchPanel({ articles, onOpenTerm, variant = "side" }) {
   const [termQuery, setTermQuery] = useState("");
   const trimmed = termQuery.trim();
   const suggestions = useMemo(() => {
@@ -907,33 +927,71 @@ function TermSearchPanel({ articles, onOpenTerm }) {
   }, [trimmed]);
   const selectedTerm = trimmed || suggestions[0];
   const insight = selectedTerm ? getTermInsight(selectedTerm, articles) : null;
+  const relatedNews = insight ? getRelatedArticles(insight.term, articles, insight.related).slice(0, variant === "wide" ? 4 : 2) : [];
+  const trendingTerms = useMemo(() => extractTrendingTerms(articles).slice(0, 12), [articles]);
 
   return (
-    <section className="termSearchPanel">
-      <div className="panelTitle">
-        <Search size={20} />
-        <strong>궁금한 경제 단어 찾기</strong>
-      </div>
-      <p>뉴스에서 본 단어를 그대로 적어보세요. 사전에 없는 표현도 경제뉴스 맥락에 맞춰 쉽게 풀어볼게요.</p>
-      <label className="searchBox full">
-        <Search size={17} />
-        <input value={termQuery} onChange={(event) => setTermQuery(event.target.value)} placeholder="예: 고유가, AI 관련주, 민생지원금" />
-      </label>
-      <div className="termList">
-        {suggestions.map((term) => (
-          <button key={term} type="button" onClick={() => {
-            setTermQuery(term);
-            onOpenTerm(term);
-          }}>{term}</button>
-        ))}
-      </div>
-      {insight && (
-        <div className="termPreview">
-          <strong>{insight.term}</strong>
-          <p>{insight.short}</p>
-          <button className="termButton" type="button" onClick={() => onOpenTerm(insight.term)}>자세히 보기</button>
+    <section className={`termSearchPanel ${variant === "wide" ? "wide" : ""}`}>
+      <div className="sectionHeader compactHeader">
+        <div>
+          <p className="eyebrow">keyword explorer</p>
+          <h2>궁금한 경제 단어를 바로 풀어보기</h2>
         </div>
-      )}
+        <span>사전에 없는 표현도 뉴스 맥락으로 연결해요</span>
+      </div>
+      <div className="termSearchGrid">
+        <div className="termSearchInputCard">
+          <p>뉴스에서 본 단어를 그대로 적어보세요. 예: 고유가, AI 관련주, 민생지원금, 반도체 수출</p>
+          <label className="searchBox full">
+            <Search size={17} />
+            <input value={termQuery} onChange={(event) => setTermQuery(event.target.value)} placeholder="궁금한 경제 단어를 입력해보세요" />
+          </label>
+          <div className="termList">
+            {suggestions.map((term) => (
+              <button key={term} type="button" onClick={() => {
+                setTermQuery(term);
+                onOpenTerm(term);
+              }}>{term}</button>
+            ))}
+          </div>
+          {trendingTerms.length > 0 && (
+            <div className="keywordCloud">
+              <strong>요즘 뉴스에서 자주 보이는 말</strong>
+              <div className="termList compact">
+                {trendingTerms.map((term) => (
+                  <button key={term} type="button" onClick={() => setTermQuery(term)}>{term}</button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        {insight && (
+          <div className="termResultCard">
+            <span className="moodPill">쉬운 경제 노트</span>
+            <h3>{insight.term}</h3>
+            <p className="termShort">{insight.short}</p>
+            <div className="termGuideStack">
+              <div className="guideCard"><strong>왜 중요할까?</strong><p>{insight.why}</p></div>
+              <div className="guideCard"><strong>최근 왜 자주 보일까?</strong><p>{insight.recent}</p></div>
+              <div className="guideCard"><strong>시장과 생활에는?</strong><p>{insight.impact}</p></div>
+            </div>
+            <div className="termList modalTerms">
+              {insight.related.map((keyword) => (
+                <button key={keyword} type="button" onClick={() => {
+                  setTermQuery(keyword);
+                  onOpenTerm(keyword);
+                }}>{keyword}</button>
+              ))}
+            </div>
+            {relatedNews.length > 0 && (
+              <div className="relatedNews inline">
+                <strong>{insight.term} 관련 뉴스</strong>
+                {relatedNews.map((article) => <a key={article.id} href={article.url} target="_blank" rel="noreferrer">{article.title}</a>)}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
@@ -1273,6 +1331,26 @@ function getMarketMood(article) {
   if (/둔화|침체|부진|하락|위축|부담/.test(text)) return { label: "🌧 경기 둔화 우려" };
   if (/변동성|불확실|우려|갈등|급락|압박/.test(text)) return { label: "⚠ 변동성 확대" };
   return { label: "🧊 관망 흐름" };
+}
+
+function extractTrendingTerms(articles) {
+  const counts = new Map();
+  for (const article of articles) {
+    for (const term of detectTerms(`${article.title} ${article.summary}`)) {
+      counts.set(term, (counts.get(term) || 0) + 1);
+    }
+    for (const word of inferNewsKeywords(`${article.title} ${article.summary}`)) {
+      counts.set(word, (counts.get(word) || 0) + 1);
+    }
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([term]) => term);
+}
+
+function inferNewsKeywords(text) {
+  const candidates = ["반도체", "AI", "고유가", "국제유가", "금리", "환율", "부동산", "전세", "월세", "민생지원금", "소비쿠폰", "관세", "수출", "코스피", "코스닥"];
+  return candidates.filter((keyword) => text.includes(keyword));
 }
 
 function buildMonthlyTopics(articles) {

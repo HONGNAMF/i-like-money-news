@@ -1140,9 +1140,13 @@ h2,
 .topicGrid,
 .topicCard,
 .termSearchPanel,
+.termSearchGrid,
+.termSearchInputCard,
+.termResultCard,
 .termPreview,
 .relatedMini,
 .relatedNews,
+.readingFlow,
 .emojiPicker {
   display: grid;
   gap: 12px;
@@ -1168,12 +1172,77 @@ h2,
 }
 
 .topicCard,
-.termSearchPanel {
+.termSearchPanel,
+.termSearchInputCard,
+.termResultCard {
   border: 1px solid var(--border);
   border-radius: 22px;
   background: var(--panel);
   box-shadow: var(--shadow);
   padding: 20px;
+}
+
+.termSearchPanel.wide {
+  margin: 0 0 22px;
+  padding: 22px;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.9), rgba(237, 245, 242, 0.78)),
+    var(--panel);
+}
+
+.termSearchPanel.wide .sectionHeader {
+  margin: 0;
+}
+
+.termSearchGrid {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+}
+
+.termSearchInputCard,
+.termResultCard {
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.termResultCard h3 {
+  margin: 2px 0 0;
+  font-family: "Noto Serif KR", Georgia, serif;
+  font-size: 1.55rem;
+}
+
+.compactHeader h2 {
+  margin: 0;
+}
+
+.keywordCloud {
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.readingFlow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 22px;
+}
+
+.readingFlow div {
+  display: grid;
+  gap: 5px;
+  border: 1px solid rgba(210, 195, 171, 0.75);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 14px;
+}
+
+.readingFlow strong {
+  color: var(--accent);
+}
+
+.readingFlow span {
+  color: var(--muted);
+  font-size: 0.93rem;
 }
 
 .topicCard h3 {
@@ -1210,6 +1279,10 @@ h2,
   font-size: 0.92rem;
   line-height: 1.45;
   text-decoration: none;
+}
+
+.relatedNews.inline {
+  margin-top: 8px;
 }
 
 .termList.compact button {
@@ -1556,6 +1629,7 @@ h2,
   .articleGrid,
   .notesGrid,
   .topicGrid,
+  .termSearchGrid,
   .sectionHeader {
     grid-template-columns: 1fr;
   }
@@ -1606,6 +1680,17 @@ h2,
 
   .emojiPicker {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .readingFlow {
+    grid-template-columns: 1fr;
+  }
+
+  .termSearchPanel.wide,
+  .termSearchInputCard,
+  .termResultCard,
+  .topicCard {
+    padding: 18px;
   }
 
   .memoBox textarea {
