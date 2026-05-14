@@ -687,12 +687,18 @@ function ProfileCard({ profile, onProfileChange, brand }) {
 
   return (
     <section className="profileCard" id="profile-card">
+      <div className="profileCardHeader">
+        <div>
+          <p className="eyebrow">profile</p>
+          <h2>프로필 사진 바꾸기</h2>
+        </div>
+        <span className="profileHint">사진 또는 이모티콘</span>
+      </div>
       <div className="profileIdentity">
         <Avatar profile={profile} />
         <div>
-          <p className="eyebrow">my archive profile</p>
-          <h2>{profile.name || "나의 경제 노트"}</h2>
-          <p className="helperText">읽은 뉴스와 남긴 생각이 쌓이는 개인 아카이브예요.</p>
+          <strong>{profile.name || "나의 경제 노트"}</strong>
+          <p className="helperText">내 뉴스 아카이브에 표시될 프로필이에요. 사진을 올리면 바로 미리보기로 바뀝니다.</p>
         </div>
       </div>
       <label className="fieldLabel">
@@ -704,16 +710,18 @@ function ProfileCard({ profile, onProfileChange, brand }) {
           placeholder="예: 돈 공부하는 나"
         />
       </label>
+      <p className="fieldLabelText">내 컴퓨터나 휴대폰에 있는 이미지를 선택하세요.</p>
       <div className="profileTools">
         <label className="uploadButton">
           <Upload size={16} />
-          사진 올리기
+          프로필 사진 선택
           <input type="file" accept="image/*" onChange={handleImage} />
         </label>
         <button className="ghostButton" type="button" onClick={() => onProfileChange({ avatarType: "brand", image: "", emoji: "" })}>
           기본 로고로
         </button>
       </div>
+      <p className="fieldLabelText">사진 대신 가벼운 이모티콘을 써도 좋아요.</p>
       <div className="emojiPicker" aria-label="프로필 이모티콘 선택">
         {PROFILE_EMOJIS.map((emoji) => (
           <button key={emoji} className={profile.avatarType === "emoji" && profile.emoji === emoji ? "selected" : ""} type="button" onClick={() => onProfileChange({ avatarType: "emoji", emoji, image: "" })}>
@@ -721,7 +729,7 @@ function ProfileCard({ profile, onProfileChange, brand }) {
           </button>
         ))}
       </div>
-      <p className="helperText">사진을 넣어도 좋고, 가벼운 이모티콘 하나로 오늘의 경제 공부 분위기를 정해도 좋아요.</p>
+      <p className="helperText">이 설정은 이 브라우저에 저장돼요. 배포용 사이트에서도 각자 자기 프로필을 따로 설정할 수 있습니다.</p>
     </section>
   );
 }

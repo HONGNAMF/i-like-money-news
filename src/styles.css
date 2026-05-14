@@ -1253,6 +1253,34 @@ h2,
   object-fit: cover;
 }
 
+.profileCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.profileCardHeader h2 {
+  margin: 0;
+}
+
+.profileHint {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fffaf1;
+  color: var(--gold);
+  padding: 7px 10px;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.profileIdentity strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+
 .fieldLabel {
   display: grid;
   gap: 8px;
@@ -1266,6 +1294,12 @@ h2,
   background: #fffdf8;
   padding: 0 12px;
   outline: 0;
+}
+
+.fieldLabelText {
+  margin: 0;
+  color: #7f7667;
+  font-size: 0.9rem;
 }
 
 .emojiPicker {
@@ -1346,27 +1380,6 @@ h2,
 .profileIdentity {
   align-items: center;
   margin-bottom: 14px;
-}
-
-.avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  object-fit: cover;
-  background: #efe6d0;
-}
-
-.avatarLarge {
-  width: 84px;
-  height: 84px;
-}
-
-.avatar.fallback {
-  display: inline-grid;
-  place-items: center;
-  border: 1px solid #d9c7a2;
-  color: #6c5830;
-  font-weight: 800;
 }
 
 .interestForm {
