@@ -700,6 +700,7 @@ h2,
 }
 
 .chip.selected,
+.termList button.selected,
 .toggleChip.active,
 .feelingChip.active {
   background: var(--accent);
@@ -1135,6 +1136,35 @@ h2,
   font-size: 0.95rem;
 }
 
+.memoBox {
+  display: grid;
+  gap: 12px;
+}
+
+.memoBox label,
+.tagInput {
+  display: grid;
+  gap: 8px;
+  color: #5a554b;
+  font-weight: 800;
+}
+
+.memoBox input,
+.memoBox textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper-strong);
+  padding: 12px 14px;
+  outline: 0;
+  font-weight: 500;
+}
+
+.memoBox textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
 .sectionHeader,
 .monthlyTopics,
 .topicGrid,
@@ -1300,17 +1330,27 @@ h2,
   color: var(--accent);
 }
 
-.avatar {
+.avatar,
+.avatarLarge {
   display: inline-grid;
   place-items: center;
   flex: 0 0 auto;
-  width: 72px;
-  height: 72px;
   overflow: hidden;
   border: 2px solid #dfc88b;
   border-radius: 999px;
   background: var(--gold-soft);
-  font-size: 2rem;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  font-size: 1.15rem;
+}
+
+.avatarLarge {
+  width: 104px;
+  height: 104px;
+  font-size: 2.5rem;
 }
 
 .avatar.compact {
@@ -1320,10 +1360,31 @@ h2,
   font-size: 1rem;
 }
 
-.avatar img {
+.avatar img,
+.avatarLarge img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.avatarButton {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 2px;
+}
+
+.avatarButton .avatar {
+  width: 36px;
+  height: 36px;
+}
+
+.profileAvatarPanel {
+  gap: 16px;
 }
 
 .profileCardHeader {
@@ -1620,6 +1681,7 @@ h2,
   }
 
   .heroStats,
+  .readingFlow,
   .noteSummary,
   .profileStats,
   .authStoryGrid,
@@ -1680,6 +1742,18 @@ h2,
 
   .emojiPicker {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .termSearchPanel.wide,
+  .topicCard,
+  .articleCard,
+  .authCard {
+    padding: 18px;
+  }
+
+  .memoBox textarea,
+  .memoBox input {
+    width: 100%;
   }
 
   .readingFlow {

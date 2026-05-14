@@ -1,11 +1,11 @@
 export const AUTH_COPY = {
   eyebrow: "personal economy archive",
-  title: "오늘의 경제뉴스를 읽고, 당신의 생각을 남겨보세요.",
+  title: "경제뉴스를 쉽게 읽고, 내 생각으로 남기는 공간",
   description:
-    "Like Money News는 경제뉴스를 쉽게 읽고, 어려운 단어를 이해하고, 내 언어로 생각을 기록하기 위한 조용한 아카이브입니다.",
-  loginHint: "이미 만든 닉네임이 있다면 바로 이어서 읽을 수 있어요.",
-  signupHint: "처음이라면 닉네임 하나로 가볍게 나만의 경제 노트를 시작해보세요.",
-  browseHint: "가입 전에도 뉴스와 용어 설명은 편하게 둘러볼 수 있어요."
+    "경제뉴스를 읽고 끝내지 마세요. 어려운 단어를 이해하고, 시장 분위기를 느끼고, 오늘의 생각을 차분히 기록해보세요.",
+  loginHint: "이미 만든 닉네임이 있다면 이어서 기록할 수 있어요.",
+  signupHint: "처음이라면 닉네임 하나로 나만의 경제뉴스 노트를 시작해보세요.",
+  browseHint: "가입 전에도 뉴스와 용어 풀이는 편하게 둘러볼 수 있어요."
 };
 
 export const THOUGHT_FEELINGS = [
@@ -58,13 +58,17 @@ export const MARKET_MOOD_RULES = [
 
 export const PROFILE_KEYWORD_SUGGESTIONS = [
   "금리",
-  "엔화",
+  "환율",
   "반도체",
   "미국경제",
   "AI",
   "부동산",
   "코스피",
   "물가",
-  "환율",
+  "ETF",
+  "고유가",
+  "DSR",
+  "전기요금",
+  "민생지원금",
   "2차전지"
 ];
