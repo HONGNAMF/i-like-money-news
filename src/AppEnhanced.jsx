@@ -1232,14 +1232,14 @@ function normalizeLegacy(key, legacy) {
 function loadSession() {
   try {
     const stored = localStorage.getItem(SESSION_STORAGE_KEY);
-    if (!stored) return { mode: "signedOut" };
+    if (!stored) return { mode: "guest" };
     const parsed = JSON.parse(stored);
     if (parsed?.mode === "member" && parsed?.nicknameKey) return parsed;
     if (parsed?.mode === "guest") return { mode: "guest" };
   } catch {
-    return { mode: "signedOut" };
+    return { mode: "guest" };
   }
-  return { mode: "signedOut" };
+  return { mode: "guest" };
 }
 
 function emptyArchiveStore() {
