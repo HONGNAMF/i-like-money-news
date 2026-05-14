@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
+    "vercel-build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "rss:server": "node server/rss-server.js",
     "live:preview": "vite build && node server/live-preview.js"
