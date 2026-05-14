@@ -63,7 +63,33 @@ function dedupeArticles(articles) {
 }
 
 function stripHtml(value) {
-  return String(value).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  return decodeHtmlEntities(String(value)
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim());
+}
+
+function decodeHtmlEntities(value) {
+  const named = {
+    amp: "&",
+    nbsp: " ",
+    quot: "\"",
+    apos: "'",
+    lt: "<",
+    gt: ">"
+  };
+
+  return value
+    .replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z]+);/g, (match, entity) => {
+      if (entity[0] === "#") {
+        const isHex = entity[1]?.toLowerCase() === "x";
+        const code = Number.parseInt(entity.slice(isHex ? 2 : 1), isHex ? 16 : 10);
+        return Number.isNaN(code) ? match : String.fromCodePoint(code);
+      }
+      return named[entity] ?? match;
+    })
+    .replace(/\u00a0/g, " ");
 }
 
 function toDate(value) {

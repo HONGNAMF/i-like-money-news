@@ -10,6 +10,8 @@ import {
   Search,
   Sparkles,
   Tag,
+  Upload,
+  UserRound,
   X
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -22,17 +24,17 @@ const BRANDS = {
     type: "emoji",
     mark: "🦀",
     name: "나는 돈이 좋아~",
-    tagline: "경제뉴스를 쉽게 읽는 노트",
+    tagline: "읽고 이해하고 기록하는 경제 아카이브",
     heroTitle: "나는 돈이 좋아~",
-    heroText: "경제뉴스를 읽고, 어려운 용어를 쉽게 익히고, 내 생각까지 남기는 돈 공부 노트입니다."
+    heroText: "경제뉴스를 읽고 끝내지 마세요. 어려운 단어를 내 언어로 이해하고, 시장 분위기를 천천히 느끼고, 오늘의 생각을 기록해보세요."
   },
   personal: {
     type: "image",
     mark: "/assets/money-crab.jpg",
     name: "나는 돈이 좋아~",
-    tagline: "경제뉴스를 쉽게 읽는 노트",
+    tagline: "읽고 이해하고 기록하는 경제 아카이브",
     heroTitle: "나는 돈이 좋아~",
-    heroText: "경제뉴스를 읽고, 어려운 용어를 쉽게 익히고, 내 생각까지 남기는 돈 공부 노트입니다."
+    heroText: "경제뉴스를 읽고 끝내지 마세요. 어려운 단어를 내 언어로 이해하고, 시장 분위기를 천천히 느끼고, 오늘의 생각을 기록해보세요."
   }
 };
 
@@ -375,6 +377,74 @@ const TERM_DICTIONARY = {
   }
 };
 
+Object.assign(TERM_DICTIONARY, {
+  금리인상: term("금리가 올라가는 흐름이에요.", "대출 이자 부담은 커질 수 있고, 예금 이자는 좋아질 수 있어요.", "금리 인상기에는 대출이 많은 가계와 기업이 부담을 느낄 수 있어요.", ["금리 인상"]),
+  금리인하: term("금리가 내려가는 흐름이에요.", "돈을 빌리기 쉬워져 소비와 투자가 살아날 수 있지만, 물가가 다시 자극될 수도 있어요.", "금리 인하 기대가 커지면 주식시장 분위기가 좋아질 때가 있어요.", ["금리 인하"]),
+  금리동결: term("중앙은행이 기준금리를 그대로 두는 결정이에요.", "물가와 경기 사이에서 조금 더 지켜보겠다는 신호로 읽히는 경우가 많아요.", "금리 동결 후에는 다음 회의 힌트가 더 중요해져요.", ["금리 동결"]),
+  연준: term("미국의 중앙은행 역할을 하는 기관이에요.", "미국 금리 결정은 달러, 환율, 전 세계 투자심리에 큰 영향을 줘요.", "연준이 금리를 오래 높게 유지하면 한국 증시도 부담을 받을 수 있어요.", ["Fed", "FRB"]),
+  FOMC: term("미국 기준금리를 결정하는 회의예요.", "회의 결과와 발언이 전 세계 금융시장 방향을 흔드는 일이 많아요.", "FOMC 이후 환율과 국채금리가 크게 움직일 수 있어요."),
+  ETF: term("주식처럼 사고팔 수 있는 묶음형 펀드예요.", "한 종목이 아니라 여러 자산에 나누어 투자하는 데 자주 쓰여요.", "반도체 ETF를 사면 여러 반도체 기업에 함께 투자하는 효과가 있어요."),
+  공매도: term("가격 하락을 예상하고 빌린 주식을 먼저 파는 방식이에요.", "시장에서는 하락 압력이나 투자심리 위축 신호로 언급될 때가 있어요.", "공매도가 늘어난 종목은 변동성이 커질 수 있어요."),
+  시가총액: term("회사 전체의 시장 가격이에요.", "주가에 발행 주식 수를 곱해 계산하고, 기업 규모를 비교할 때 많이 써요.", "시가총액이 큰 기업은 지수 움직임에도 큰 영향을 줘요.", ["시총"]),
+  성장주: term("앞으로 크게 성장할 기대가 반영된 주식이에요.", "금리가 낮거나 미래 실적 기대가 클 때 관심을 받기 쉬워요.", "AI 성장 기대가 커지면 성장주가 강해질 수 있어요."),
+  가치주: term("현재 이익이나 자산에 비해 싸다고 평가받는 주식이에요.", "경기가 안정적이거나 금리가 높은 시기에 다시 주목받는 경우가 있어요.", "은행주나 배당주가 가치주로 언급될 때가 많아요."),
+  외국인매수: term("외국인 투자자가 한국 주식을 사들이는 흐름이에요.", "대형주와 지수 방향에 영향을 줄 수 있어 시장 분위기 판단에 자주 쓰여요.", "외국인 매수가 늘면 코스피가 힘을 받을 수 있어요.", ["외국인 매수", "외국인 순매수"]),
+  기관매수: term("연기금, 펀드 같은 기관 투자자가 주식을 사는 흐름이에요.", "개인 투자자보다 장기 자금 성격이 있어 수급 판단에 참고돼요.", "기관 매수가 이어지면 특정 업종에 대한 기대를 볼 수 있어요.", ["기관 매수"]),
+  반도체: term("전자기기의 핵심 부품을 만드는 산업이에요.", "한국 수출과 증시에 큰 비중을 차지해 경제뉴스에서 자주 등장해요.", "AI 수요가 늘면 고성능 반도체 기업의 기대가 커질 수 있어요."),
+  AI관련주: term("AI 성장과 관련 있다고 여겨지는 기업들의 주식이에요.", "실적보다 기대감이 먼저 움직일 수 있어 변동성도 함께 커질 수 있어요.", "AI 관련주는 데이터센터, 반도체, 소프트웨어 기업과 함께 언급돼요.", ["AI 관련주", "AI"]),
+  테마주: term("특정 이슈나 기대감으로 함께 움직이는 주식들이에요.", "실적보다 이야기와 기대가 가격을 움직일 때가 많아 주의가 필요해요.", "정책 발표 뒤 관련 테마주가 급등락할 수 있어요."),
+  PPI: term("생산자가 판매하는 상품 가격 변화를 보여주는 지표예요.", "소비자물가보다 먼저 움직일 때가 있어 앞으로의 물가 압력을 보는 데 쓰여요.", "PPI가 오르면 나중에 소비자 가격도 오를 수 있어요.", ["생산자물가지수"]),
+  스태그플레이션: term("경기는 나쁜데 물가는 계속 오르는 어려운 상황이에요.", "정책 선택이 까다로워져 시장이 특히 불안해할 수 있어요.", "성장은 둔화되는데 기름값이 오르면 스태그플레이션 우려가 나올 수 있어요."),
+  디플레이션: term("물가가 전반적으로 내려가는 현상이에요.", "겉으로는 좋아 보이지만 소비와 투자가 얼어붙는 신호일 수 있어요.", "사람들이 더 싸질 때까지 소비를 미루면 경기가 약해질 수 있어요."),
+  달러강세: term("달러 가치가 다른 통화보다 강해지는 흐름이에요.", "수입 물가와 환율, 외국인 자금 흐름에 영향을 줄 수 있어요.", "달러 강세가 이어지면 원달러 환율이 오를 수 있어요.", ["달러 강세"]),
+  엔화약세: term("엔화 가치가 낮아지는 흐름이에요.", "일본 여행 비용, 수출 경쟁력, 환율 뉴스와 함께 자주 언급돼요.", "엔화 약세가 길어지면 일본 제품의 가격 경쟁력이 좋아질 수 있어요.", ["엔화 약세"]),
+  고유가: term("국제 유가가 높은 상태예요.", "기름값, 물류비, 항공비, 생활 물가 부담으로 이어질 수 있어요.", "고유가가 이어지면 정유주는 관심을 받고 항공주는 부담을 느낄 수 있어요."),
+  국제유가: term("세계 시장에서 거래되는 원유 가격이에요.", "물가와 기업 비용, 산유국 정책에 영향을 주기 때문에 중요해요.", "국제유가가 오르면 주유비와 배송비 부담이 커질 수 있어요.", ["유가"]),
+  수출: term("국내에서 만든 상품이나 서비스를 해외에 파는 일이에요.", "한국 경제는 수출 비중이 커서 반도체, 자동차 수출 뉴스가 중요하게 다뤄져요.", "수출이 좋아지면 기업 실적과 환율에도 영향을 줄 수 있어요."),
+  관세: term("수입품에 붙는 세금이에요.", "관세가 오르면 물건값이 비싸지고 나라 간 무역 갈등이 커질 수 있어요.", "미국이 관세를 올리면 관련 기업의 비용과 판매 전략이 바뀔 수 있어요."),
+  부동산규제: term("집값과 대출, 거래를 관리하기 위한 정책이에요.", "DSR, LTV, 세금, 청약 제도와 함께 주택시장 분위기를 바꿀 수 있어요.", "규제가 완화되면 거래 기대가 살아날 수 있지만 지역별 차이는 커요.", ["부동산 규제"]),
+  전세: term("큰 보증금을 맡기고 집을 빌려 사는 한국식 임대 방식이에요.", "금리와 입주 물량에 따라 전세가격이 크게 움직일 수 있어요.", "전세가격이 오르면 세입자의 주거비 부담이 커져요."),
+  월세: term("매달 임대료를 내고 집을 빌리는 방식이에요.", "금리가 높아지면 전세보다 월세 선호가 늘어나는 경우가 있어요.", "월세가 오르면 매달 생활비 부담이 바로 커져요."),
+  지원금: term("정부나 지자체가 부담을 덜어주기 위해 지급하는 돈이에요.", "소비를 돕거나 특정 계층의 생활비 부담을 줄이는 정책으로 쓰여요.", "지원금이 풀리면 단기적으로 소비가 늘 수 있어요."),
+  소비쿠폰: term("정해진 곳에서 소비할 수 있도록 주는 쿠폰형 지원이에요.", "지역 상권이나 특정 업종 소비를 살리는 데 쓰일 수 있어요.", "소비쿠폰이 나오면 외식, 마트, 전통시장 매출이 늘 수 있어요."),
+  민생지원금: term("생활비 부담을 덜기 위해 지급되는 지원금이에요.", "물가가 높거나 경기가 약할 때 소비를 지탱하는 정책으로 언급돼요.", "민생지원금은 가계 소비와 재정 부담을 함께 봐야 해요."),
+  생활비: term("먹고 살고 이동하고 주거하는 데 들어가는 기본 비용이에요.", "물가, 월세, 전기요금, 교통비가 오르면 생활비 부담이 커져요.", "생활비가 늘면 저축과 소비 여력이 줄어들 수 있어요."),
+  전기요금: term("전기를 사용한 만큼 내는 요금이에요.", "가계 생활비뿐 아니라 공장과 자영업자의 비용에도 영향을 줘요.", "전기요금 인상은 물가 부담으로 이어질 수 있어요.")
+});
+
+const PROFILE_EMOJIS = ["🦀", "🌱", "☁️", "📚", "🐟", "🐈", "🌙", "🍞"];
+
+const MONTHLY_TOPIC_TEMPLATES = [
+  {
+    title: "금리 인하 기대감",
+    keywords: ["기준금리", "금리인하", "연준", "FOMC", "국채금리"],
+    description: "중앙은행이 언제 금리를 낮출지에 대한 기대가 시장의 큰 이야기가 되고 있어요.",
+    reason: "금리가 내려가면 대출 부담과 투자 심리가 함께 달라질 수 있기 때문이에요.",
+    mood: "🧊 관망 흐름"
+  },
+  {
+    title: "반도체 회복 흐름",
+    keywords: ["반도체", "AI", "AI관련주", "코스피", "수출"],
+    description: "AI 수요와 수출 회복 기대가 반도체 업종을 다시 뉴스의 중심으로 데려오고 있어요.",
+    reason: "한국 증시와 수출에서 반도체 비중이 크기 때문에 경기 분위기와 연결돼요.",
+    mood: "🌱 성장 기대"
+  },
+  {
+    title: "고유가와 생활 물가",
+    keywords: ["고유가", "국제유가", "물가상승률", "생활비", "전기요금"],
+    description: "기름값과 공공요금이 생활비 부담으로 이어질 수 있다는 걱정이 커지고 있어요.",
+    reason: "물류비와 생산비가 오르면 소비자가 체감하는 가격도 올라갈 수 있어요.",
+    mood: "⚠ 변동성 확대"
+  },
+  {
+    title: "부동산 규제와 전월세",
+    keywords: ["부동산규제", "DSR", "LTV", "전세", "월세"],
+    description: "대출 규제와 전월세 흐름이 주거비와 거래 심리에 영향을 주고 있어요.",
+    reason: "집을 사려는 사람, 세입자, 집주인의 판단이 모두 달라질 수 있기 때문이에요.",
+    mood: "🧊 관망 흐름"
+  }
+];
+
 const TERM_KEYS = Object.keys(TERM_DICTIONARY).sort((a, b) => b.length - a.length);
 
 function App() {
@@ -415,6 +485,8 @@ function App() {
   );
 
   const visibleArticles = filteredArticles.slice(0, visibleCount);
+  const monthlyTopics = useMemo(() => buildMonthlyTopics(articles), [articles]);
+  const profile = data.profile || emptyData().profile;
 
   function openTerm(term) {
     setOpenedTerm(term);
@@ -456,16 +528,24 @@ function App() {
 
   return (
     <main className="app">
-      <Header activeView={activeView} setActiveView={setActiveView} noteCount={savedArticles.length} brand={brand} />
+      <Header activeView={activeView} setActiveView={setActiveView} noteCount={savedArticles.length} brand={brand} profile={profile} />
       <section className="hero">
-        <div>
-          <p className="eyebrow">copyright-safe economy archive</p>
+        <div className="heroMain">
+          <p className="eyebrow">personal economy archive</p>
           <h1><BrandMark brand={brand} size="hero" />{brand.heroTitle}</h1>
           <p className="heroText">
             {brand.heroText}
           </p>
+          <div className="heroStats">
+            <div className="statTile"><strong>{articles.length || "-"}</strong><span>오늘 읽을 뉴스</span><small>제목과 짧은 요약만 모았어요</small></div>
+            <div className="statTile"><strong>{savedArticles.length}</strong><span>내 노트</span><small>다시 보고 싶은 생각</small></div>
+            <div className="statTile"><strong>{learnedList.length}</strong><span>익힌 용어</span><small>눌러본 경제 키워드</small></div>
+          </div>
         </div>
-        <LearnedWidget learnedTerms={learnedList} openTerm={openTerm} />
+        <div className="heroSide">
+          <ProfileCard profile={profile} onProfileChange={(profilePatch) => setData((current) => ({ ...current, profile: { ...current.profile, ...profilePatch } }))} brand={brand} />
+          <LearnedWidget learnedTerms={learnedList} openTerm={openTerm} />
+        </div>
       </section>
 
       {activeView === "feed" ? (
@@ -478,6 +558,7 @@ function App() {
             articleSource={articleSource}
             totalCount={filteredArticles.length}
           />
+          <MonthlyTopics topics={monthlyTopics} articles={articles} onOpenTerm={openTerm} />
           <section className="contentGrid">
             <div className="articleGrid">
               {visibleArticles.map((article) => (
@@ -499,8 +580,9 @@ function App() {
               />
             </div>
             <aside className="sidePanel">
+              <TermSearchPanel articles={articles} onOpenTerm={openTerm} />
               <TermGame learnedTerms={learnedList} onOpenTerm={openTerm} />
-              <IntegrationPlan />
+              <SensefolioPanel />
             </aside>
           </section>
         </>
@@ -515,7 +597,7 @@ function App() {
         />
       )}
 
-      {openedTerm && <TermModal term={openedTerm} onClose={() => setOpenedTerm(null)} />}
+      {openedTerm && <TermModal term={openedTerm} articles={articles} onOpenTerm={openTerm} onClose={() => setOpenedTerm(null)} />}
     </main>
   );
 }
@@ -543,7 +625,7 @@ function LoadMoreArea({ articleSource, remaining, totalCount, onLoadMore }) {
   );
 }
 
-function Header({ activeView, setActiveView, noteCount, brand }) {
+function Header({ activeView, setActiveView, noteCount, brand, profile }) {
   return (
     <header className="topbar">
       <button className="brand" onClick={() => setActiveView("feed")} type="button">
@@ -559,6 +641,10 @@ function Header({ activeView, setActiveView, noteCount, brand }) {
           내 노트 <span>{noteCount}</span>
         </button>
       </nav>
+      <button className="profileShortcut" type="button" onClick={() => document.getElementById("profile-card")?.scrollIntoView({ behavior: "smooth", block: "center" })}>
+        <Avatar profile={profile} compact />
+        <span>{profile.name || "나의 경제 노트"}</span>
+      </button>
     </header>
   );
 }
@@ -579,6 +665,67 @@ function BrandMark({ brand, size = "nav" }) {
   );
 }
 
+function Avatar({ profile, compact = false }) {
+  const className = compact ? "avatar compact" : "avatar";
+  if (profile.avatarType === "image" && profile.image) {
+    return <span className={className}><img src={profile.image} alt="" /></span>;
+  }
+  if (profile.avatarType === "emoji" && profile.emoji) {
+    return <span className={className}>{profile.emoji}</span>;
+  }
+  return <span className={className}><BrandMark brand={getBrand()} /></span>;
+}
+
+function ProfileCard({ profile, onProfileChange, brand }) {
+  function handleImage(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => onProfileChange({ avatarType: "image", image: reader.result });
+    reader.readAsDataURL(file);
+  }
+
+  return (
+    <section className="profileCard" id="profile-card">
+      <div className="profileIdentity">
+        <Avatar profile={profile} />
+        <div>
+          <p className="eyebrow">my archive profile</p>
+          <h2>{profile.name || "나의 경제 노트"}</h2>
+          <p className="helperText">읽은 뉴스와 남긴 생각이 쌓이는 개인 아카이브예요.</p>
+        </div>
+      </div>
+      <label className="fieldLabel">
+        별명
+        <input
+          className="softInput"
+          value={profile.name || ""}
+          onChange={(event) => onProfileChange({ name: event.target.value })}
+          placeholder="예: 돈 공부하는 나"
+        />
+      </label>
+      <div className="profileTools">
+        <label className="uploadButton">
+          <Upload size={16} />
+          사진 올리기
+          <input type="file" accept="image/*" onChange={handleImage} />
+        </label>
+        <button className="ghostButton" type="button" onClick={() => onProfileChange({ avatarType: "brand", image: "", emoji: "" })}>
+          기본 로고로
+        </button>
+      </div>
+      <div className="emojiPicker" aria-label="프로필 이모티콘 선택">
+        {PROFILE_EMOJIS.map((emoji) => (
+          <button key={emoji} className={profile.avatarType === "emoji" && profile.emoji === emoji ? "selected" : ""} type="button" onClick={() => onProfileChange({ avatarType: "emoji", emoji, image: "" })}>
+            {emoji}
+          </button>
+        ))}
+      </div>
+      <p className="helperText">사진을 넣어도 좋고, 가벼운 이모티콘 하나로 오늘의 경제 공부 분위기를 정해도 좋아요.</p>
+    </section>
+  );
+}
+
 function Toolbar({ category, setCategory, query, setQuery, articleSource, totalCount }) {
   return (
     <section className="toolbar">
@@ -596,11 +743,52 @@ function Toolbar({ category, setCategory, query, setQuery, articleSource, totalC
       </div>
       <label className="searchBox">
         <Search size={18} />
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="제목, 요약, 메모 검색" />
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="궁금한 뉴스, 메모, 키워드를 찾아보세요" />
       </label>
       <div className={`sourceNotice ${articleSource}`}>
-        {articleSource === "live" ? "실시간 RSS 뉴스" : articleSource === "loading" ? "뉴스 불러오는 중" : "샘플 뉴스"}
+        {articleSource === "live" ? "새 뉴스 연결됨" : articleSource === "loading" ? "뉴스를 모으는 중" : "샘플로 둘러보기"}
         <span>{totalCount}개</span>
+      </div>
+    </section>
+  );
+}
+
+function MonthlyTopics({ topics, articles, onOpenTerm }) {
+  return (
+    <section className="monthlyTopics">
+      <div className="sectionHeader">
+        <div>
+          <p className="eyebrow">monthly mood</p>
+          <h2>이번 달 자주 언급되는 경제 토픽</h2>
+        </div>
+        <span>뉴스를 흐름으로 읽어보세요</span>
+      </div>
+      <div className="topicGrid">
+        {topics.map((topic) => {
+          const related = getRelatedArticles(topic.title, articles, topic.keywords).slice(0, 2);
+          return (
+            <article className="topicCard" key={topic.title}>
+              <span className="moodPill">{topic.mood}</span>
+              <h3>{topic.title}</h3>
+              <p>{topic.description}</p>
+              <div className="topicReason">
+                <strong>왜 화제일까?</strong>
+                <span>{topic.reason}</span>
+              </div>
+              <div className="termList compact">
+                {topic.keywords.slice(0, 4).map((keyword) => (
+                  <button key={keyword} type="button" onClick={() => onOpenTerm(keyword)}>{keyword}</button>
+                ))}
+              </div>
+              {related.length > 0 && (
+                <div className="relatedMini">
+                  <strong>관련 뉴스</strong>
+                  {related.map((article) => <a key={article.id} href={article.url} target="_blank" rel="noreferrer">{article.title}</a>)}
+                </div>
+              )}
+            </article>
+          );
+        })}
       </div>
     </section>
   );
@@ -610,11 +798,15 @@ function ArticleCard({ article, memo, isSaved, onOpenTerm, onMemoChange, onToggl
   const [guideOpen, setGuideOpen] = useState(false);
   const terms = useMemo(() => detectTerms(`${article.title} ${article.summary}`), [article]);
   const categoryMeta = CATEGORIES.find((item) => item.id === article.category);
+  const mood = getMarketMood(article);
 
   return (
     <article className="articleCard">
       <div className="cardTop">
-        <span className={`categoryBadge ${categoryMeta?.tone || "neutral"}`}>{categoryMeta?.label}</span>
+        <div className="cardBadges">
+          <span className={`categoryBadge ${categoryMeta?.tone || "neutral"}`}>{categoryMeta?.label}</span>
+          <span className="moodPill">{mood.label}</span>
+        </div>
         <button className={`iconButton ${isSaved ? "saved" : ""}`} onClick={() => onToggleSaved(article.id)} type="button" aria-label="뉴스 저장">
           <Bookmark size={18} fill={isSaved ? "currentColor" : "none"} />
         </button>
@@ -628,7 +820,7 @@ function ArticleCard({ article, memo, isSaved, onOpenTerm, onMemoChange, onToggl
         <div className="termList">
           {terms.length ? terms.map((term) => (
             <button key={term} type="button" onClick={() => onOpenTerm(term)}>{term}</button>
-          )) : <span className="emptyText">감지된 용어가 아직 없어요.</span>}
+          )) : <span className="emptyText">아직 표시할 용어가 없어요. 궁금한 단어는 오른쪽 검색창에 직접 적어보세요.</span>}
         </div>
       </section>
 
@@ -646,11 +838,11 @@ function ArticleCard({ article, memo, isSaved, onOpenTerm, onMemoChange, onToggl
       <section className="memoBox">
         <label>
           <NotebookPen size={16} />
-          내 생각
+          오늘의 기록
           <textarea
             value={memo?.content || ""}
             onChange={(event) => onMemoChange(article.id, { content: event.target.value })}
-            placeholder="한 줄 평이나 더 찾아보고 싶은 점을 적어보세요."
+            placeholder="새롭게 알게 된 것, 나중에 다시 보고 싶은 생각, 오늘 느낀 시장 분위기를 편하게 남겨보세요."
           />
         </label>
         <label className="tagInput">
@@ -659,17 +851,17 @@ function ArticleCard({ article, memo, isSaved, onOpenTerm, onMemoChange, onToggl
           <input
             value={(memo?.tags || []).join(", ")}
             onChange={(event) => onMemoChange(article.id, { tags: toTags(event.target.value) })}
-            placeholder="예: 금리공부, 내대출, 관심종목"
+            placeholder="예: 금리공부, 생활비, 반도체"
           />
         </label>
       </section>
 
       <div className="cardActions">
         <a href={article.url} target="_blank" rel="noreferrer">
-          원문 보기 <ExternalLink size={16} />
+          언론사 원문 읽기 <ExternalLink size={16} />
         </a>
         <button type="button" onClick={() => onToggleSaved(article.id)}>
-          {isSaved ? "저장됨" : "노트에 저장"}
+          {isSaved ? "내 노트에 담김" : "내 노트에 담기"}
         </button>
       </div>
     </article>
@@ -681,7 +873,7 @@ function LearnedWidget({ learnedTerms, openTerm }) {
     <aside className="learnedWidget">
       <div className="widgetTitle">
         <Brain size={20} />
-        <strong>오늘 배운 용어</strong>
+        <strong>최근 눌러본 경제 키워드</strong>
       </div>
       {learnedTerms.length ? (
         <div className="learnedTerms">
@@ -692,15 +884,55 @@ function LearnedWidget({ learnedTerms, openTerm }) {
           ))}
         </div>
       ) : (
-        <p>뉴스 카드의 노란 용어를 눌러보면 여기에 기록돼요.</p>
+        <p>뉴스를 읽다가 노란 키워드를 눌러보면 여기에 차곡차곡 쌓여요.</p>
       )}
     </aside>
   );
 }
 
+function TermSearchPanel({ articles, onOpenTerm }) {
+  const [termQuery, setTermQuery] = useState("");
+  const trimmed = termQuery.trim();
+  const suggestions = useMemo(() => {
+    const base = trimmed ? searchTerms(trimmed) : ["기준금리", "CPI", "코스피", "고유가", "부동산규제", "ETF", "환율", "반도체"];
+    return base.slice(0, 8);
+  }, [trimmed]);
+  const selectedTerm = trimmed || suggestions[0];
+  const insight = selectedTerm ? getTermInsight(selectedTerm, articles) : null;
+
+  return (
+    <section className="termSearchPanel">
+      <div className="panelTitle">
+        <Search size={20} />
+        <strong>궁금한 경제 단어 찾기</strong>
+      </div>
+      <p>뉴스에서 본 단어를 그대로 적어보세요. 사전에 없는 표현도 경제뉴스 맥락에 맞춰 쉽게 풀어볼게요.</p>
+      <label className="searchBox full">
+        <Search size={17} />
+        <input value={termQuery} onChange={(event) => setTermQuery(event.target.value)} placeholder="예: 고유가, AI 관련주, 민생지원금" />
+      </label>
+      <div className="termList">
+        {suggestions.map((term) => (
+          <button key={term} type="button" onClick={() => {
+            setTermQuery(term);
+            onOpenTerm(term);
+          }}>{term}</button>
+        ))}
+      </div>
+      {insight && (
+        <div className="termPreview">
+          <strong>{insight.term}</strong>
+          <p>{insight.short}</p>
+          <button className="termButton" type="button" onClick={() => onOpenTerm(insight.term)}>자세히 보기</button>
+        </div>
+      )}
+    </section>
+  );
+}
+
 function TermGame({ learnedTerms, onOpenTerm }) {
   const allTerms = useMemo(() => {
-    const learned = learnedTerms.map((item) => item.term);
+    const learned = learnedTerms.map((item) => findCanonicalTerm(item.term)).filter(Boolean);
     return [...new Set([...learned, ...TERM_KEYS])];
   }, [learnedTerms]);
   const [round, setRound] = useState(() => makeRound(allTerms));
@@ -796,43 +1028,61 @@ function NotesPage({ articles, memos, saved, onOpenTerm, onMemoChange, onToggleS
           ))}
         </div>
       ) : (
-        <div className="emptyState">저장한 뉴스가 아직 없어요. 마음에 드는 뉴스를 노트에 저장해보세요.</div>
+        <div className="emptyState">
+          <UserRound size={26} />
+          <strong>아직 남겨진 경제 기록이 없어요.</strong>
+          <p>오늘 읽은 뉴스에서 마음에 걸린 문장, 새롭게 알게 된 단어, 나중에 다시 보고 싶은 생각을 가볍게 남겨보세요.</p>
+        </div>
       )}
     </section>
   );
 }
 
-function IntegrationPlan() {
+function SensefolioPanel() {
   return (
-    <section className="integrationPanel">
+    <section className="sensePanel">
       <div className="panelTitle">
         <ExternalLink size={19} />
-        <strong>API 연동 구조</strong>
+        <strong>투자 해석이 더 궁금하다면</strong>
       </div>
-      <p>`나는돈이좋아.bat`으로 열면 RSS 서버에서 최신 경제뉴스를 가져옵니다. HTML만 더블클릭하면 샘플 뉴스로 보일 수 있어요.</p>
-      <ul>
-        <li>기사 전문 저장 금지</li>
-        <li>요약은 220자 안팎</li>
-        <li>원문 링크는 언론사 URL 유지</li>
-      </ul>
+      <p>뉴스를 읽고 난 뒤, 시장 해석과 투자 관점까지 이어서 보고 싶다면 Sensefolio에서 조금 더 깊게 살펴볼 수 있어요.</p>
+      <a className="primaryButton soft" href="https://sensefolio-note.vercel.app/" target="_blank" rel="noreferrer">
+        Sensefolio 보기 <ExternalLink size={16} />
+      </a>
     </section>
   );
 }
 
-function TermModal({ term, onClose }) {
-  const entry = TERM_DICTIONARY[term];
+function TermModal({ term, articles, onOpenTerm, onClose }) {
+  const entry = getTermInsight(term, articles);
+  const related = getRelatedArticles(term, articles, entry.related).slice(0, 3);
   return (
     <div className="modalBackdrop" onClick={onClose} role="presentation">
       <section className="termModal" onClick={(event) => event.stopPropagation()}>
         <button className="closeButton" type="button" onClick={onClose} aria-label="닫기"><X size={20} /></button>
-        <p className="eyebrow">경제 용어 풀이</p>
-        <h3>{term}</h3>
+        <p className="eyebrow">경제 키워드 노트</p>
+        <h3>{entry.term}</h3>
         <p className="termShort">{entry.short}</p>
-        <p>{entry.detail}</p>
+        <div className="termGuideStack">
+          <div className="guideCard"><strong>왜 중요할까?</strong><p>{entry.why}</p></div>
+          <div className="guideCard"><strong>요즘 왜 자주 보일까?</strong><p>{entry.recent}</p></div>
+          <div className="guideCard"><strong>시장과 생활에는?</strong><p>{entry.impact}</p></div>
+        </div>
         <div className="exampleBox">
-          <strong>예시</strong>
+          <strong>예시로 읽기</strong>
           <span>{entry.example}</span>
         </div>
+        <div className="termList modalTerms">
+          {entry.related.map((keyword) => (
+            <button key={keyword} type="button" onClick={() => onOpenTerm(keyword)}>{keyword}</button>
+          ))}
+        </div>
+        {related.length > 0 && (
+          <div className="relatedNews">
+            <strong>{entry.term} 관련 뉴스</strong>
+            {related.map((article) => <a key={article.id} href={article.url} target="_blank" rel="noreferrer">{article.title}</a>)}
+          </div>
+        )}
       </section>
     </div>
   );
@@ -855,7 +1105,17 @@ function usePersistentData() {
 }
 
 function emptyData() {
-  return { saved: {}, memos: {}, learnedTerms: {} };
+  return {
+    saved: {},
+    memos: {},
+    learnedTerms: {},
+    profile: {
+      name: "",
+      avatarType: "brand",
+      emoji: "",
+      image: ""
+    }
+  };
 }
 
 function detectTerms(text) {
@@ -900,6 +1160,121 @@ function normalizeAnswer(value) {
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function term(short, detail, example, aliases = []) {
+  return {
+    aliases,
+    short,
+    detail,
+    example,
+    why: detail,
+    recent: "최근 뉴스에서 정책, 금리, 업종 흐름과 함께 자주 언급되는 키워드예요.",
+    impact: "시장 심리와 생활비, 투자 판단에 간접적으로 영향을 줄 수 있어요."
+  };
+}
+
+function searchTerms(query) {
+  const normalized = normalizeAnswer(query);
+  const matches = TERM_KEYS.filter((term) => {
+    const entry = TERM_DICTIONARY[term];
+    return normalizeAnswer(term).includes(normalized) || entry.aliases?.some((alias) => normalizeAnswer(alias).includes(normalized));
+  });
+  return matches.length ? matches : [query, ...inferRelatedKeywords(query)].slice(0, 8);
+}
+
+function getTermInsight(rawTerm, articles = []) {
+  const canonical = findCanonicalTerm(rawTerm);
+  const entry = canonical ? TERM_DICTIONARY[canonical] : null;
+  const termName = canonical || rawTerm;
+  const related = [...new Set([...(entry?.aliases || []), ...inferRelatedKeywords(termName)])].filter((item) => item && normalizeAnswer(item) !== normalizeAnswer(termName)).slice(0, 6);
+  const relatedCount = getRelatedArticles(termName, articles, related).length;
+
+  if (entry) {
+    return {
+      term: termName,
+      short: entry.short,
+      why: entry.why || entry.detail,
+      recent: relatedCount ? `최근 가져온 뉴스 중 ${relatedCount}건에서 이 흐름과 연결되는 표현이 보여요.` : entry.recent || "경제뉴스에서 자주 등장하는 기본 키워드예요.",
+      impact: entry.impact || entry.detail,
+      example: entry.example,
+      related: related.length ? related : inferRelatedKeywords(termName)
+    };
+  }
+
+  const guessed = inferTermType(termName);
+  return {
+    term: termName,
+    short: `${termName}은/는 최근 뉴스 맥락에서 흐름을 이해하기 위해 따로 살펴볼 만한 경제 키워드예요.`,
+    why: guessed.why,
+    recent: relatedCount ? `현재 뉴스 목록에서 관련 기사 ${relatedCount}건이 보여요. 새로 등장한 정책명이나 산업 표현도 이렇게 연결해서 볼 수 있어요.` : "아직 사전에 고정된 단어가 아니어도, 뉴스에서 반복해서 보이면 중요한 흐름일 수 있어요.",
+    impact: guessed.impact,
+    example: `"${termName}"이라는 단어가 보이면, 어떤 업종·정책·생활비와 연결되는지 함께 읽어보면 좋아요.`,
+    related
+  };
+}
+
+function findCanonicalTerm(value) {
+  const normalized = normalizeAnswer(value);
+  return TERM_KEYS.find((term) => normalizeAnswer(term) === normalized || TERM_DICTIONARY[term].aliases?.some((alias) => normalizeAnswer(alias) === normalized));
+}
+
+function inferRelatedKeywords(value) {
+  const text = String(value);
+  if (/금리|연준|FOMC|국채|채권/.test(text)) return ["기준금리", "연준", "국채금리", "환율", "코스피"];
+  if (/반도체|AI|삼성|하이닉스|테마/.test(text)) return ["반도체", "AI관련주", "코스피", "수출", "외국인매수"];
+  if (/유가|원유|기름|물가|전기|생활/.test(text)) return ["고유가", "국제유가", "물가상승률", "생활비", "환율"];
+  if (/부동산|전세|월세|DSR|LTV|주택/.test(text)) return ["부동산규제", "DSR", "LTV", "전세", "월세"];
+  if (/환율|달러|엔화|수출|관세/.test(text)) return ["환율", "달러강세", "수출", "관세", "원자재"];
+  if (/지원금|쿠폰|민생|소비/.test(text)) return ["민생지원금", "소비쿠폰", "생활비", "소비심리", "물가상승률"];
+  return ["금리", "환율", "물가상승률", "코스피", "생활비"];
+}
+
+function inferTermType(value) {
+  const text = String(value);
+  if (/정책|지원|쿠폰|규제|관세/.test(text)) {
+    return {
+      why: "정책 키워드는 돈의 흐름과 사람들의 선택을 바꿀 수 있어서 중요해요.",
+      impact: "가계 부담, 기업 비용, 특정 업종의 기대감에 영향을 줄 수 있어요."
+    };
+  }
+  if (/AI|반도체|배터리|산업|기업/.test(text)) {
+    return {
+      why: "산업 키워드는 기업 실적과 증시 분위기를 이해하는 단서가 돼요.",
+      impact: "관련 업종의 투자심리, 수출 기대, 고용 흐름에 영향을 줄 수 있어요."
+    };
+  }
+  return {
+    why: "경제뉴스에서 반복되는 단어는 시장이 지금 무엇을 걱정하거나 기대하는지 보여줘요.",
+    impact: "금리, 환율, 물가, 주식시장, 생활비 중 어디와 연결되는지 함께 보면 이해가 쉬워져요."
+  };
+}
+
+function getRelatedArticles(term, articles, related = []) {
+  const words = [term, ...related].filter(Boolean).map(normalizeAnswer);
+  return articles.filter((article) => {
+    const text = normalizeAnswer(`${article.title} ${article.summary}`);
+    return words.some((word) => word && text.includes(word));
+  });
+}
+
+function getMarketMood(article) {
+  const text = `${article.title} ${article.summary}`;
+  if (/급등|과열|랠리|테마|강세/.test(text)) return { label: "🔥 과열" };
+  if (/기대|회복|성장|수요|개선|호조/.test(text)) return { label: "🌱 성장 기대" };
+  if (/둔화|침체|부진|하락|위축|부담/.test(text)) return { label: "🌧 경기 둔화 우려" };
+  if (/변동성|불확실|우려|갈등|급락|압박/.test(text)) return { label: "⚠ 변동성 확대" };
+  return { label: "🧊 관망 흐름" };
+}
+
+function buildMonthlyTopics(articles) {
+  return MONTHLY_TOPIC_TEMPLATES.map((topic) => {
+    const relatedCount = getRelatedArticles(topic.title, articles, topic.keywords).length;
+    return {
+      ...topic,
+      reason: relatedCount ? `${topic.reason} 현재 뉴스 목록에서도 관련 흐름이 ${relatedCount}건 이어지고 있어요.` : topic.reason
+    };
+  });
 }
 
 function getBrand() {

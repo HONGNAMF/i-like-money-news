@@ -1135,6 +1135,207 @@ h2,
   font-size: 0.95rem;
 }
 
+.sectionHeader,
+.monthlyTopics,
+.topicGrid,
+.topicCard,
+.termSearchPanel,
+.termPreview,
+.relatedMini,
+.relatedNews,
+.emojiPicker {
+  display: grid;
+  gap: 12px;
+}
+
+.sectionHeader {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  margin: 22px 0 14px;
+}
+
+.sectionHeader span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.monthlyTopics {
+  margin-bottom: 22px;
+}
+
+.topicGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.topicCard,
+.termSearchPanel {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.topicCard h3 {
+  margin: 0;
+  font-family: "Noto Serif KR", Georgia, serif;
+  font-size: 1.16rem;
+}
+
+.topicCard p,
+.topicReason span,
+.termSearchPanel p,
+.termPreview p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.topicReason,
+.termPreview {
+  border-radius: 16px;
+  background: rgba(255, 250, 241, 0.78);
+  padding: 12px;
+}
+
+.relatedMini,
+.relatedNews {
+  gap: 7px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.relatedMini a,
+.relatedNews a {
+  color: #3f5f5a;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.termList.compact button {
+  padding: 7px 10px;
+  font-size: 0.88rem;
+}
+
+.searchBox.full {
+  width: 100%;
+}
+
+.termPreview strong,
+.relatedNews strong,
+.relatedMini strong {
+  color: var(--accent);
+}
+
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border: 2px solid #dfc88b;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  font-size: 2rem;
+}
+
+.avatar.compact {
+  width: 28px;
+  height: 28px;
+  border-width: 1px;
+  font-size: 1rem;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fieldLabel {
+  display: grid;
+  gap: 8px;
+  font-size: 0.92rem;
+}
+
+.softInput {
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fffdf8;
+  padding: 0 12px;
+  outline: 0;
+}
+
+.emojiPicker {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.emojiPicker button {
+  min-width: 0;
+  min-height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fffaf1;
+  font-size: 1.1rem;
+}
+
+.emojiPicker button.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.moodPill {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 30px;
+  border: 1px solid rgba(210, 195, 171, 0.9);
+  border-radius: 999px;
+  background: rgba(255, 250, 241, 0.9);
+  color: #5e5548;
+  padding: 5px 10px;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.articleCard {
+  gap: 14px;
+}
+
+.articleCard h2 {
+  margin-bottom: 0;
+}
+
+.summary {
+  line-height: 1.68;
+}
+
+.memoBox textarea {
+  line-height: 1.65;
+}
+
+.termGuideStack {
+  margin-top: 14px;
+}
+
+.guideCard {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 250, 241, 0.74);
+  padding: 13px;
+}
+
+.modalTerms {
+  margin-top: 14px;
+}
+
+.sensePanel .primaryButton {
+  width: fit-content;
+  margin-top: 4px;
+}
+
 .lockedView {
   display: grid;
   justify-items: center;
@@ -1287,7 +1488,8 @@ h2,
   }
 
   .notesGrid,
-  .articleGrid {
+  .articleGrid,
+  .topicGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1306,7 +1508,8 @@ h2,
   .topbarActions,
   .navTabs,
   .brand,
-  .profileTools {
+  .profileTools,
+  .profileShortcut {
     width: 100%;
   }
 
@@ -1338,8 +1541,14 @@ h2,
   .guideGrid,
   .historyGrid,
   .articleGrid,
-  .notesGrid {
+  .notesGrid,
+  .topicGrid,
+  .sectionHeader {
     grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    align-items: start;
   }
 
   .toolbar,
@@ -1380,6 +1589,23 @@ h2,
   .profileIdentity {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .emojiPicker {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .memoBox textarea {
+    min-height: 118px;
+    font-size: 1rem;
+  }
+
+  .articleCard {
+    padding: 20px;
+  }
+
+  .cardBadges {
+    align-items: flex-start;
   }
 
   .modalBackdrop {
