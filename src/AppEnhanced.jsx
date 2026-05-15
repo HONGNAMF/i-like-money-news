@@ -22,6 +22,7 @@ import { fetchArticles } from "./newsSources";
 
 const ARCHIVE_STORAGE_KEY = "like-money-news-archive-v5";
 const SESSION_STORAGE_KEY = "like-money-news-session-v2";
+const REMEMBERED_MEMBER_KEY = "like-money-news-remembered-member";
 const LEGACY_STORAGE_KEYS = ["like-money-news-archive-v4", "easy-econ-news-v3", "easy-econ-news-v2"];
 const INITIAL_VISIBLE_COUNT = 8;
 const PROFILE_EMOJIS = ["🦀", "🌱", "☁️", "📚", "🐟", "🐈", "🌙", "🍞"];
@@ -151,6 +152,7 @@ function AppEnhanced() {
       return { ok: false, message: "등록되지 않은 닉네임입니다. 회원가입을 먼저 해주세요." };
     }
 
+    rememberMember(normalized);
     setSession({ mode: "member", nicknameKey: normalized });
     setActiveView("feed");
     return { ok: true, message: `${store.users[normalized].nickname} 님의 기록을 다시 열었어요.` };
@@ -169,6 +171,7 @@ function AppEnhanced() {
         [normalized]: emptyMemberArchive(cleaned)
       }
     }));
+    rememberMember(normalized);
     setSession({ mode: "member", nicknameKey: normalized });
     setActiveView("feed");
     return { ok: true, message: `${cleaned} 님의 첫 경제 아카이브를 만들었어요.` };
@@ -185,6 +188,7 @@ function AppEnhanced() {
   }
 
   function handleLogout() {
+    forgetMember();
     setSession({ mode: "signedOut" });
     setActiveView("feed");
   }
@@ -421,7 +425,14 @@ function AppEnhanced() {
           <div className="emptyState">
             지금은 둘러보기 모드예요. 뉴스 읽기와 용어 풀이는 바로 볼 수 있고, 메모와 내 노트, 프로필은 로그인 후 사용할 수 있어요.
           </div>
-        ) : null}
+        ) : (
+          <ProfilePhotoBanner
+            user={currentUser}
+            onUploadPhoto={uploadProfilePhoto}
+            onSelectEmoji={selectProfileEmoji}
+            onOpenProfile={() => setActiveView("profile")}
+          />
+        )}
 
         <nav className="toolbar">
           <div className="categoryRail">
@@ -531,7 +542,7 @@ function AppEnhanced() {
 }
 
 function AuthScreen({ brand, onLogin, onSignup, onBrowse }) {
-  const [loginNickname, setLoginNickname] = useState("");
+  const [loginNickname, setLoginNickname] = useState(() => getRememberedMember() || "");
   const [signupNickname, setSignupNickname] = useState("");
   const [feedback, setFeedback] = useState({ tone: "", message: "" });
 
@@ -595,6 +606,44 @@ function AuthScreen({ brand, onLogin, onSignup, onBrowse }) {
         </form>
 
         {feedback.message ? <p className={`authFeedback ${feedback.tone}`}>{feedback.message}</p> : null}
+      </div>
+    </section>
+  );
+}
+
+function ProfilePhotoBanner({ user, onUploadPhoto, onSelectEmoji, onOpenProfile }) {
+  return (
+    <section className="profilePhotoBanner">
+      <div className="profileIdentity">
+        <Avatar nickname={user.nickname} photo={user.profile.photo} emoji={user.profile.avatarEmoji} large />
+        <div>
+          <p className="eyebrow">profile photo</p>
+          <h2>프로필 사진을 바로 설정할 수 있어요</h2>
+          <p className="helperText">사진을 올리면 상단 프로필과 내 경제 아카이브에 바로 반영돼요. 다음에 들어와도 로그인 정보와 함께 기억됩니다.</p>
+        </div>
+      </div>
+      <div className="profileBannerActions">
+        <label className="uploadButton standout">
+          <Camera size={17} />
+          프로필 사진 올리기
+          <input type="file" accept="image/*" onChange={(event) => onUploadPhoto(event.target.files?.[0])} />
+        </label>
+        <div className="emojiPicker compact">
+          {PROFILE_EMOJIS.map((emoji) => (
+            <button
+              key={emoji}
+              type="button"
+              className={user.profile.avatarEmoji === emoji && !user.profile.photo ? "selected" : ""}
+              onClick={() => onSelectEmoji(emoji)}
+              aria-label={`${emoji} 아바타 선택`}
+            >
+              {emoji}
+            </button>
+          ))}
+        </div>
+        <button className="ghostButton" type="button" onClick={onOpenProfile}>
+          프로필 자세히 보기
+        </button>
       </div>
     </section>
   );
@@ -1232,7 +1281,10 @@ function normalizeLegacy(key, legacy) {
 function loadSession() {
   try {
     const stored = localStorage.getItem(SESSION_STORAGE_KEY);
-    if (!stored) return { mode: "guest" };
+    if (!stored) {
+      const remembered = getRememberedMember();
+      return remembered ? { mode: "member", nicknameKey: remembered } : { mode: "guest" };
+    }
     const parsed = JSON.parse(stored);
     if (parsed?.mode === "member" && parsed?.nicknameKey) return parsed;
     if (parsed?.mode === "guest") return { mode: "guest" };
@@ -1240,6 +1292,30 @@ function loadSession() {
     return { mode: "guest" };
   }
   return { mode: "guest" };
+}
+
+function rememberMember(nicknameKey) {
+  try {
+    localStorage.setItem(REMEMBERED_MEMBER_KEY, nicknameKey);
+  } catch {
+    // If storage is unavailable, the normal session state still works in memory.
+  }
+}
+
+function forgetMember() {
+  try {
+    localStorage.removeItem(REMEMBERED_MEMBER_KEY);
+  } catch {
+    // Ignore storage failures.
+  }
+}
+
+function getRememberedMember() {
+  try {
+    return normalizeNickname(localStorage.getItem(REMEMBERED_MEMBER_KEY) || "");
+  } catch {
+    return "";
+  }
 }
 
 function emptyArchiveStore() {

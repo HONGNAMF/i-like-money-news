@@ -161,6 +161,7 @@ a {
 .navTabs,
 .profileShortcut,
 .ghostButton,
+.profilePhotoBanner,
 .authCard,
 .authStoryCard,
 .modeBanner,
@@ -706,6 +707,42 @@ h2,
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
+}
+
+.profilePhotoBanner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr);
+  gap: 18px;
+  align-items: center;
+  margin: 16px 0 20px;
+  padding: 22px;
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.92), rgba(237, 245, 242, 0.86)),
+    var(--panel);
+}
+
+.profilePhotoBanner h2 {
+  margin: 0 0 8px;
+  font-size: 1.45rem;
+}
+
+.profileBannerActions {
+  display: grid;
+  gap: 12px;
+}
+
+.uploadButton.standout {
+  min-height: 54px;
+  width: 100%;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 900;
+}
+
+.emojiPicker.compact {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
 }
 
 .searchBox,
@@ -1663,6 +1700,7 @@ h2,
   .heroMain,
   .authHero,
   .authCard,
+  .profilePhotoBanner,
   .learnedWidget,
   .briefingPanel,
   .focusPanel,
@@ -1694,6 +1732,11 @@ h2,
   .termSearchGrid,
   .sectionHeader {
     grid-template-columns: 1fr;
+  }
+
+  .profilePhotoBanner {
+    grid-template-columns: 1fr;
+    padding: 18px;
   }
 
   .sectionHeader {
@@ -1740,7 +1783,8 @@ h2,
     flex-direction: column;
   }
 
-  .emojiPicker {
+  .emojiPicker,
+  .emojiPicker.compact {
     grid-template-columns: repeat(4, 1fr);
   }
 
